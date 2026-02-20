@@ -1,5 +1,8 @@
 # Graham Essays Collection
-[![CI](https://github.com/ofou/graham-essays/actions/workflows/main.yml/badge.svg)](https://github.com/ofou/graham-essays/actions/workflows/main.yml) [![Ubuntu](https://github.com/ofou/graham-essays/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/ofou/graham-essays/actions/workflows/ubuntu.yml) [![wakatime](https://wakatime.com/badge/github/ofou/graham-essays.svg?style=social)](https://wakatime.com/badge/github/ofou/graham-essays)
+
+This is the new maintained version under `konradbjk/graham-essay-downloader`.
+It is based on the original `ofou/graham-essays` project and keeps the same spirit,
+while modernizing the tooling and CLI.
 
 ![https://startupquote.com/post/3890222281](https://64.media.tumblr.com/tumblr_li4p22jETB1qz6pqio1_500.png)
 
@@ -13,15 +16,69 @@ Download the _complete collection_ of +200 essays from [Paul Graham] website and
 
 ## Dependencies for MacOS
 
-On macOS you need [brew] in order to install the dependencies listed in the Makefile.
+On macOS you need [brew] in order to install the external tools used by the CLI, e.g.:
+
+```bash
+brew install uv pandoc calibre
+```
 
 ## Usage
 
-Run the [Makefile](./Makefile) in the root directory using:
+Install Python dependencies with `uv`:
 
 ```bash
-make
+uv venv .venv
+uv sync
 ```
+
+Run the CLI:
+
+```bash
+uv run graham-essays fetch
+uv run graham-essays merge
+uv run graham-essays epub
+uv run graham-essays pdf
+uv run graham-essays wordcount
+```
+
+Or run everything at once:
+
+```bash
+uv run graham-essays all
+```
+
+See all commands:
+
+```bash
+uv run graham-essays --help
+```
+
+### Metadata Exports
+
+Each markdown file includes YAML frontmatter with `title`, `description`, `date`, and `author`.
+The `fetch` command also writes `essays.csv` with columns:
+
+- Article no.
+- Title
+- Description
+- Date
+- Author
+- URL
+- Filename
+
+You can disable the CSV or choose a different path:
+
+```bash
+uv run graham-essays fetch --no-csv
+uv run graham-essays fetch --csv-path data/essays.csv
+```
+
+### External Tools
+
+These commands rely on external tools:
+
+- `pandoc` (for `merge` and `epub`)
+- `calibre` (for `pdf`, which uses `ebook-convert`)
 
 ### Current Essays
 
